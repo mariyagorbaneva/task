@@ -58,9 +58,8 @@
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">selection-color: rgb(85, 255, 255);
-color: rgb(0, 255, 255);
-font: 8pt &quot;MingLiU_HKSCS-ExtB&quot;;</string>
+     <string notr="true">font: 8pt &quot;MingLiU_HKSCS-ExtB&quot;;
+color: rgb(170, 0, 0);</string>
     </property>
    </widget>
    <widget class="QDateEdit" name="dateEdit">
