@@ -1,0 +1,1 @@
+C:\Python_Basic\Task_project pyuic5 -x tracker.ui -o MainWindow.py

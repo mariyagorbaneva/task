@@ -32,10 +32,12 @@ class Ui_MainWindow(object):
         self.calendarWidget.setObjectName("calendarWidget")
         self.plainTextEdit = QtWidgets.QPlainTextEdit(self.centralwidget)
         self.plainTextEdit.setGeometry(QtCore.QRect(1, 67, 222, 116))
-        self.plainTextEdit.setStyleSheet("selection-color: rgb(85, 255, 255);\n"
-"color: rgb(0, 0, 0);\n"
-"color: rgb(0, 255, 255);\n"
-"font: 8pt \"MingLiU_HKSCS-ExtB\";")
+        font = QtGui.QFont()
+        font.setPointSize(10)
+        font.setBold(True)
+        font.setWeight(75)
+        self.plainTextEdit.setFont(font)
+        self.plainTextEdit.setStyleSheet("color: rgb(170, 0, 0);")
         self.plainTextEdit.setObjectName("plainTextEdit")
         self.dateEdit = QtWidgets.QDateEdit(self.centralwidget)
         self.dateEdit.setGeometry(QtCore.QRect(0, 185, 126, 22))
