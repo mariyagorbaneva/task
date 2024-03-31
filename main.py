@@ -1,4 +1,6 @@
+
 from PyQt6 import uic
+from PyQt6.QtCore import QDate
 from PyQt6.QtWidgets import QApplication
 import pickle
 
@@ -14,51 +16,52 @@ window.show()
 date_param = 'dd-MM-yyyy'
 data_file = 'config.txt'
 
+class DateSet():
+    start_date: QDate
+    calc_date: QDate
+    description: str
+
 def save_to_file_history():
-    global start_date, calc_date, description
-    data_to_save = {'start': start_date, 'end': calc_date, 'desc': description}
+    data_to_save = {'start': DateSet.start_date, 'end': DateSet.calc_date, 'desc': DateSet.description}
     history = open(data_file, 'wb')
     pickle.dump(data_to_save, history)
     history.close()
     pass
 
 def read_from_file_history():
-    global start_date, calc_date, description
     try:
         history = open(data_file, 'rb')
         data_to_load = pickle.load(history)
         history.close()
-        start_date = data_to_load['start']
-        calc_date = data_to_load['end']
-        description = data_to_load['desc']
-        start_date.toString(date_param), calc_date.toString(date_param), description
-        form.calendarWidget.setSelectedDate(calc_date)
-        form.dateEdit.setDate(calc_date)
-        form.plainTextEdit.setPlainText(description)
-        print('\n', start_date.toString(date_param), '\n', calc_date.toString(date_param), '\n', description)
+        DateSet.start_date = data_to_load['start']
+        DateSet.calc_date = data_to_load['end']
+        DateSet.description = data_to_load['desc']
+        DateSet.start_date.toString(date_param), DateSet.calc_date.toString(date_param), DateSet.description
+        form.calendarWidget.setSelectedDate(DateSet.calc_date)
+        form.dateEdit.setDate(DateSet.calc_date)
+        form.plainTextEdit.setPlainText(DateSet.description)
+        print('\n', DateSet.start_date.toString(date_param), '\n', DateSet.calc_date.toString(date_param), '\n', DateSet.description)
     except:
         print('Файл не существует')
 
 
+
 def on_click():
-    global calc_date, description
-    calc_date = form.calendarWidget.selectedDate()
-    description = form.plainTextEdit.toPlainText()
+    DateSet.calc_date = form.calendarWidget.selectedDate()
+    DateSet.description = form.plainTextEdit.toPlainText()
     save_to_file_history()
 
 
 def on_click_calendar():
-    global start_date, calc_date
     form.dateEdit.setDate(form.calendarWidget.selectedDate())
-    calc_date = form.calendarWidget.selectedDate()
-    delta_days = start_date.daysTo(calc_date)
+    DateSet.calc_date = form.calendarWidget.selectedDate()
+    delta_days = DateSet.start_date.daysTo(DateSet.calc_date)
     form.label_2.setText("Дедлайн через : %s" % delta_days)
 
 def on_dateedit_change():
-    global start_date, calc_date
     form.calendarWidget.setSelectedDate(form.dateEdit.date())
-    calc_date = form.dateEdit.date()
-    delta_days = start_date.daysTo(calc_date)
+    DateSet.calc_date = form.dateEdit.date()
+    delta_days = DateSet.start_date.daysTo(DateSet.calc_date)
     form.label_2.setText("Дедлайн через : %s" % delta_days)
     print('осталось ', delta_days, 'дней')
 
@@ -66,12 +69,12 @@ form.pushButton.clicked.connect(on_click)
 form.calendarWidget.clicked.connect(on_click_calendar)
 form.dateEdit.dateChanged.connect(on_dateedit_change)
 
-start_date = form.calendarWidget.selectedDate()
-calc_date = form.calendarWidget.selectedDate()
-description = form.plainTextEdit.toPlainText()
+DateSet.start_date = form.calendarWidget.selectedDate()
+DateSet.calc_date = form.calendarWidget.selectedDate()
+DateSet.description = form.plainTextEdit.toPlainText()
 read_from_file_history()
 
-form.label.setText("Сегодня: %s" % start_date.toString(date_param))
+form.label.setText("Сегодня: %s" % DateSet.start_date.toString(date_param))
 on_click_calendar()
 
 app.exec()
