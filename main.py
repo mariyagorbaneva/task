@@ -17,10 +17,9 @@ date_param = 'dd-MM-yyyy'
 data_file = 'config.txt'
 
 class DateSet():
-    def __init__(self, __start_date: QDate, __calc_date: QDate, __description: str):
-        self.__start_date = __start_date
-        self.__calc_date = __calc_date
-        self.__description = __description
+    __start_date: QDate
+    __calc_date: QDate
+    __description: str
 
     @staticmethod
     def get_date_set(__calc_date, __start_date, __description):
@@ -32,10 +31,12 @@ class DateSet():
 
 
 
+
 def save_to_file_history():
     data_to_save = {'start': DateSet.get_date_set(__calc_date=QDate),
                     'end': DateSet.get_date_set(__start_date=QDate),
-                    'desc': DateSet.get_date_set(__description=str)}
+                    'desc': DateSet.get_date_set(__description=str)
+                    }
     history = open(data_file, 'wb')
     pickle.dump(data_to_save, history)
     history.close()
