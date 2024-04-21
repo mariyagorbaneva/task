@@ -1,7 +1,9 @@
 import pickle
 
+from PyQt5.QtCore import QDate
 from PyQt6 import uic
-from PyQt6.QtCore import QDate
+import csv
+
 from PyQt6.QtWidgets import QApplication
 
 Form, Window = uic.loadUiType("tracker.ui")
@@ -13,7 +15,8 @@ form.setupUi(window)
 window.show()
 
 date_param = 'dd-MM-yyyy'
-data_file = 'config.txt'
+data_file_csv = csv.reader('data_file.csv', delimiter=";")
+data_file_txt = 'config.txt'
 
 
 class DateSet:
@@ -33,22 +36,24 @@ class DateSet:
 
 
 def save_to_file_history():
-    # data_to_save = {'start': DateSet.get_data_set()[0],
-    #                 'end': DateSet.get_data_set()[1],
-    #                 'desc': DateSet.get_data_set()[2]
-    #                 }
-    data_to_save = {"start": DateSet.start_date,
+    data_to_save = {'start': DateSet.start_date,
                     'end': DateSet.calc_date,
                     'desc': DateSet.description}
-    history = open(data_file, 'wb')
-    pickle.dump(data_to_save, history)
-    history.close()
-    pass
+    history = open(data_file_txt, 'wb')
 
+    with open('data_file.csv', 'w', encoding='cp1251') as file:
+        writer = csv.writer(file, delimiter=";")
+        writer.writerow(
+            ('Дата Сегодня', 'Дата События', 'Название события')
+        )
+        with open('data_file.csv', 'a', encoding='cp1251') as file:
+            writer = csv.writer(file, delimiter=";")
+            writer.writerow((DateSet.start_date, DateSet.calc_date, DateSet.description))
+            writer.writerow((DateSet.start_date.toString(date_param), DateSet.calc_date.toString(date_param), DateSet.description))
 
 def read_from_file_history():
     try:
-        history = open(data_file, 'rb')
+        history = open(data_file_txt, 'rb')
         data_to_load = pickle.load(history)
         history.close()
         DateSet.start_date_date = data_to_load['start']
@@ -56,7 +61,7 @@ def read_from_file_history():
         DateSet.description = data_to_load['desc']
         DateSet.start_date.toString(date_param), DateSet.calc_date.toString(date_param), DateSet.description
         form.calendarWidget.setSelectedDate(DateSet.calc_date)
-        form.dateEdit.setDate(DateSet.calc_date)
+        form.dateTimeEdit.setDate(DateSet.calc_date)
         form.plainTextEdit.setPlainText(DateSet.description)
         print('\n', DateSet.calc_date.toString(date_param), '\n',
               DateSet.calc_date.toString(date_param), '\n', DateSet.description)
