@@ -46,10 +46,7 @@ def save_to_file_history():
         writer.writerow(
             ('Дата Сегодня', 'Дата События', 'Название события')
         )
-        with open('data_file.csv', 'a', encoding='cp1251') as file:
-            writer = csv.writer(file, delimiter=";")
-            writer.writerow((DateSet.start_date, DateSet.calc_date, DateSet.description))
-            writer.writerow((DateSet.start_date.toString(date_param), DateSet.calc_date.toString(date_param), DateSet.description))
+        writer.writerow((DateSet.start_date.toString(date_param), DateSet.calc_date.toString(date_param), DateSet.description))
 
 def read_from_file_history():
     try:
